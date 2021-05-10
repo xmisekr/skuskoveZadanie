@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 08, 2021 at 03:38 PM
+-- Generation Time: May 10, 2021 at 08:42 PM
 -- Server version: 8.0.23-0ubuntu0.20.04.1
 -- PHP Version: 8.0.3
 
@@ -78,7 +78,7 @@ INSERT INTO `question` (`id`, `test_id`, `value`, `type`, `max_points`, `review_
 
 CREATE TABLE `student` (
   `id` int NOT NULL,
-  `pid` int NOT NULL,
+  `pid` varchar(256) COLLATE utf8_slovak_ci NOT NULL,
   `name` varchar(100) COLLATE utf8_slovak_ci NOT NULL,
   `surname` varchar(100) COLLATE utf8_slovak_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
@@ -88,7 +88,9 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `pid`, `name`, `surname`) VALUES
-(10, 7890, 'Student', 'Ackar');
+(24, '1234', 'test', 'tester'),
+(32, '434', 'dalsi', 'test'),
+(10, '7890', 'Student', 'Ackar');
 
 -- --------------------------------------------------------
 
@@ -100,6 +102,7 @@ CREATE TABLE `student_test` (
   `id` int NOT NULL,
   `student_id` int NOT NULL,
   `test_id` int NOT NULL,
+  `timer_id` int NOT NULL,
   `in_test` tinyint(1) NOT NULL,
   `completed` tinyint(1) NOT NULL,
   `score` int DEFAULT NULL
@@ -109,8 +112,10 @@ CREATE TABLE `student_test` (
 -- Dumping data for table `student_test`
 --
 
-INSERT INTO `student_test` (`id`, `student_id`, `test_id`, `in_test`, `completed`, `score`) VALUES
-(30, 10, 1, 0, 1, 1020);
+INSERT INTO `student_test` (`id`, `student_id`, `test_id`, `timer_id`, `in_test`, `completed`, `score`) VALUES
+(20, 10, 1, 2, 1, 1, NULL),
+(21, 24, 1, 2, 1, 1, NULL),
+(23, 32, 1, 2, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -143,17 +148,15 @@ INSERT INTO `student_test_answer` (`id`, `student_test_id`, `answer_id`, `points
 CREATE TABLE `teacher` (
   `id` int NOT NULL,
   `email` varchar(100) COLLATE utf8_slovak_ci NOT NULL,
-  `name` varchar(100) COLLATE utf8_slovak_ci NOT NULL,
-  `surname` varchar(100) COLLATE utf8_slovak_ci NOT NULL,
-  `password` varchar(100) COLLATE utf8_slovak_ci NOT NULL
+  `password` varchar(256) CHARACTER SET utf8 COLLATE utf8_slovak_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
 -- Dumping data for table `teacher`
 --
 
-INSERT INTO `teacher` (`id`, `email`, `name`, `surname`, `password`) VALUES
-(1, 'teacher@stuba.sk', 'Svaty Palo', 'Marak', 'heslo123');
+INSERT INTO `teacher` (`id`, `email`, `password`) VALUES
+(1, 'teacher@stuba.sk', 'heslo123');
 
 -- --------------------------------------------------------
 
@@ -166,6 +169,7 @@ CREATE TABLE `test` (
   `timer_id` int NOT NULL,
   `teacher_id` int NOT NULL,
   `shared_key` varchar(10) COLLATE utf8_slovak_ci NOT NULL,
+  `name` varchar(256) COLLATE utf8_slovak_ci NOT NULL,
   `active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
@@ -173,8 +177,8 @@ CREATE TABLE `test` (
 -- Dumping data for table `test`
 --
 
-INSERT INTO `test` (`id`, `timer_id`, `teacher_id`, `shared_key`, `active`) VALUES
-(1, 1, 1, 'key123', 1);
+INSERT INTO `test` (`id`, `timer_id`, `teacher_id`, `shared_key`, `name`, `active`) VALUES
+(1, 1, 1, 'key123', '', 1);
 
 -- --------------------------------------------------------
 
@@ -184,15 +188,18 @@ INSERT INTO `test` (`id`, `timer_id`, `teacher_id`, `shared_key`, `active`) VALU
 
 CREATE TABLE `timer` (
   `id` int NOT NULL,
-  `minutes` varchar(10) COLLATE utf8_slovak_ci NOT NULL
+  `hours` int NOT NULL,
+  `minutes` int NOT NULL,
+  `seconds` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
 -- Dumping data for table `timer`
 --
 
-INSERT INTO `timer` (`id`, `minutes`) VALUES
-(1, '60');
+INSERT INTO `timer` (`id`, `hours`, `minutes`, `seconds`) VALUES
+(1, 1, 0, 0),
+(2, 0, 32, 59);
 
 --
 -- Indexes for dumped tables
@@ -217,7 +224,7 @@ ALTER TABLE `question`
 --
 ALTER TABLE `student`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `pid` (`pid`);
+  ADD UNIQUE KEY `pid` (`pid`,`name`,`surname`);
 
 --
 -- Indexes for table `student_test`
@@ -225,7 +232,8 @@ ALTER TABLE `student`
 ALTER TABLE `student_test`
   ADD PRIMARY KEY (`id`),
   ADD KEY `student_id` (`student_id`),
-  ADD KEY `test_id` (`test_id`);
+  ADD KEY `test_id` (`test_id`),
+  ADD KEY `timer_id` (`timer_id`);
 
 --
 -- Indexes for table `student_test_answer`
@@ -277,7 +285,7 @@ ALTER TABLE `question`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `student_test`
@@ -307,7 +315,7 @@ ALTER TABLE `test`
 -- AUTO_INCREMENT for table `timer`
 --
 ALTER TABLE `timer`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -330,7 +338,8 @@ ALTER TABLE `question`
 --
 ALTER TABLE `student_test`
   ADD CONSTRAINT `student_test_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `student_test_ibfk_2` FOREIGN KEY (`test_id`) REFERENCES `test` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `student_test_ibfk_2` FOREIGN KEY (`test_id`) REFERENCES `test` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `student_test_ibfk_3` FOREIGN KEY (`timer_id`) REFERENCES `timer` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `student_test_answer`
