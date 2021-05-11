@@ -1,4 +1,4 @@
-<?php
+questions<?php
 	echo "index";
 ?>
 

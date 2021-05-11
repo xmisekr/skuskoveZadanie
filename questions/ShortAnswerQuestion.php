@@ -1,184 +1,62 @@
 <?php
+	include_once ("repository/SharedRepository.php");
 
-	require_once("app/Database.php");
-	class ShortAnswerQuestion {
-		private $question;
-		private $answer;
-		private $testId;
-		private $questionId;
-		private $maxPoints;
-		private $conn;
-		private $answerId;
 
-		public function getQuestion(){
-			return $this->question;
-			$conn = (new Database())->createConnectioon();
+	function addQuestionToDBSA($testId, $question, $questionId, $maxPoints, $answer, $answerId){
+		$rep = new SharedRepository();
+		if ($questionId== null){
 
+		$a = $rep->insert("question", ["test_id"=>$testId, "value"=>$question, "type"=>"text", "max_points"=>$maxPoints,"review_answer"=>"1"]);
+		//var_dump($a);
+		$questionId=$a->insert_id;
+
+
+		$a =$rep->insert("answer", ["question_id"=>$questionId, "value"=>$answer, "correct"=>"true", "points"=>$maxPoints]);
+
+		$answerId=$a->insert_id;
+
+	}else{
+		$rep->update("question", $questionId, ["test_id"=>$testId, "value"=>$question, "type"=>"text", "max_points"=>$maxPoints,"review_answer"=>"1"]);
+
+
+		if ($answerId==null){
+			$rep->insert("answer", ["question_id"=>$questionId, "value"=>$answer, "correct"=>"true", "max_points"=>$maxPoints]);
+		}else{
+			$rep->update("answer", $answerId, ["question_id"=>$questionId, "value"=>$answer, "correct"=>"true", "max_points"=>$maxPoints]);
 		}
+	}
+	}
+	function getFromDBSa(){
+		//todo
+	}
 
-		/**
-		 * @param mixed $question
-		 */
-		public function setQuestion($question)
-		{
-			$this->question = $question;
-		}
-
-		/**
-		 * @return mixed
-		 */
-		public function getAnswer()
-		{
-			return $this->answer;
-		}
-
-		/**
-		 * @param mixed $answer
-		 */
-		public function setAnswer($answer)
-		{
-			$this->answer = $answer;
-		}
-
-		/**
-		 * @return mixed
-		 */
-		public function getTestId()
-		{
-			return $this->testId;
-		}
-
-		/**
-		 * @param mixed $testId
-		 */
-		public function setTestId($testId)
-		{
-			$this->testId = $testId;
-		}
-
-		/**
-		 * @return mixed
-		 */
-		public function getQuestionId()
-		{
-			return $this->questionId;
-		}
-
-		/**
-		 * @param mixed $questionId
-		 */
-		public function setQuestionId($questionId)
-		{
-			$this->questionId = $questionId;
-		}
-
-		/**
-		 * @return mixed
-		 */
-		public function getMaxPoints()
-		{
-			return $this->maxPoints;
-		}
-
-		/**
-		 * @param mixed $maxPoints
-		 */
-		public function setMaxPoints($maxPoints)
-		{
-			$this->maxPoints = $maxPoints;
-		}
-
-		/**
-		 * @return mixed
-		 */
-		public function getConn()
-		{
-			return $this->conn;
-		}
-
-		/**
-		 * @param mixed $conn
-		 */
-		public function setConn($conn)
-		{
-			$this->conn = $conn;
-		}
-
-		/**
-		 * @return mixed
-		 */
-		public function getAnswerId()
-		{
-			return $this->answerId;
-		}
-
-		/**
-		 * @param mixed $answerId
-		 */
-		public function setAnswerId($answerId)
-		{
-			$this->answerId = $answerId;
-		}
-
-
-		/**
-		 * ChoiceQuestion constructor.
-		 */
-		public function __construct($testId){
-			$this->testId=$testId;
-		}
-
-		public function addQuestionToDB(){
-			if ($this->questionId== null){
-				$stmQuestion= $this->conn->prepare("INSERT INTO question ( test_id, value, type, max_points) VALUES (:testId, :question, 'choice',:maxpoints)");
-				$stmQuestion -> bindParam(':testId', $this->testId);
-				$stmQuestion -> bindParam(':question', $this->question);
-				$stmQuestion -> bindParam(':maxPoints', $this->maxPoints);
-				$stmQuestion->execute();
-
-				$stmQuestionId = $this->conn->prepare("SELECT id FROM question WHERE test_id = $this->testId & value = $this->question & type = 'choice' & max_points = $this->maxPoints");
-				$stmQuestionId->execute();
-				$a = $stmQuestionId->fetch(PDO::FETCH_ASSOC);
-				$this->questionId = $a["id"];
-
-				$stmAnswer= $this->conn->prepare("INSERT INTO answer ( question_id, value, correct, points) VALUES (:questionId, :answer, :correct,:points)");
-				$stmAnswer -> bindParam(':questionId', $this->questionId);
-				$stmAnswer -> bindParam(':answer', $this->answer);
-				$stmAnswer -> bindParam(':correct', 'true');
-				$stmAnswer -> bindParam(':maxPoints', $this->maxPoints);
-				$stmAnswer->execute();
-
-				$stmAnswerId= $this->conn->prepare("SELECT id FROM answer WHERE  question_id = $this->questionId & value = $this->answer & correct = 'true' & points= $this->maxPoints");
-				$stmAnswerId->execute();
-				$a = $stmAnswerId->fetch(PDO::FETCH_ASSOC);
-				$this->questionId = $a["id"];
-			}else{
-				$stmQuestion= $this->conn->prepare("UPDATE question SET value = :question, max_points = :maxpoints WHERE id = $this->questionId");
-				$stmQuestion -> bindParam(':question', $this->question);
-				$stmQuestion -> bindParam(':maxPoints', $this->maxPoints);
-				$stmQuestion->execute();
-
-				$stmAnswer= $this->conn->prepare("UPDATE answer SET  value = :answer, points = :points WHERE id = $this->answerId");
-				$stmAnswer -> bindParam(':answer', $this->answer);
-				$stmAnswer -> bindParam(':maxPoints', $this->maxPoints);
-				$stmAnswer->execute();
-			}
-
-		}
-		public function deleteQuestion(){
-
-		}
-
-		public function addQuestionToForm(){
-
-		}
-		public function addOptionToForm(){
-
-		}
-
-		public function submitAnswers(){
-
-		}
-
+	function deleteQuestionSA($answerId, $questionId){
+		$rep = new SharedRepository();
+		$rep->delete("answer", $answerId);
+		$rep->delete("question", $questionId);
 
 	}
+
+	function addQuestionTeacherSA(){
+		echo "<input name='Question' placeholder='Question' type='text' ><input name='Answer' placeholder='Answer' type='text'>";
+	}
+	function addQuestionStudentSA($questionId){
+		$rep = new SharedRepository();
+		$question = $rep->selectAll("question", ["id"=>$questionId]);
+
+		echo "<label for='Answer' >".$question["value"]."</label><input name='Answer' placeholder='Answer' type='text'>";
+	}
+
+	function submitAnswersSA($studentTestId, $questionId, $answer){
+		$rep = new SharedRepository();
+		$a = $rep->selectOne("answer",  ["question_id"=>$questionId, "correct"=>"true"]);
+		if (strcmp(trim(strtolower($a["value"])), trim(strtolower($answer)))==0){
+			$points = $a["points"];
+		}else{
+			$points = 0;
+		}
+
+		$rep->insert("student_test_answer", ["question_id"=>$questionId, "student_test_id"=>$studentTestId, "student_answer"=>$answer, "points"=>$points]);
+
+	}
+
