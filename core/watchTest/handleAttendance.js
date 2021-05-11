@@ -19,31 +19,42 @@ function createRows(data){
 
     for (let i = 0; i < data.length; i++){
         let row = document.createElement('tr');
+        row.classList.add("row");
 
         let name = document.createElement('td');
         name.innerHTML = data[i]['name'];
+        name.classList.add("cell");
         row.appendChild(name);
 
         let surname = document.createElement('td');
         surname.innerHTML = data[i]['surname'];
+        surname.classList.add("cell");
         row.appendChild(surname);
 
         let inTest = document.createElement('td');
+        inTest.classList.add("cell");
+        let icon = document.createElement('i');
+
         if (data[i]['in_test']){
-            inTest.innerHTML = 'Yes';
+            icon.className = "fa fa-check";
 
         }else{
-            inTest.innerHTML = 'No';
+            icon.className = "fa fa-times";
         }
+        inTest.appendChild(icon);
         row.appendChild(inTest);
 
         let completed = document.createElement('td');
+        icon = document.createElement('i');
+        completed.classList.add("cell");
+
         if (data[i]['completed']){
-            completed.innerHTML = 'Yes';
+            icon.className = "fa fa-check";
 
         }else{
-            completed.innerHTML = 'No';
+            icon.className = "fa fa-times";
         }
+        completed.appendChild(icon);
         row.appendChild(completed);
 
         tbody.appendChild(row);

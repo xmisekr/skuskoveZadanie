@@ -15,9 +15,7 @@
     text-align:center;
     transition: all 0.2s;
 }
-
-
-
+    
 .new-test{
     display: flex;
     justify-content: center;
@@ -178,6 +176,14 @@
   }
   input[type=checkbox]:focus {
     outline: 0;
+  }
+
+  .fa-check{
+    color: green;
+  }
+
+  .fa-times{
+    color: darkred;
   }
   
   .toggle {
