@@ -16,6 +16,11 @@
     transition: all 0.2s;
 }
     
+section{
+  padding-top: 10em;
+}
+  
+
 .new-test{
     display: flex;
     justify-content: center;
@@ -23,109 +28,109 @@
 }
 
 @media all and (max-width:30em){
-    .create-test{
-        display:block;
-        margin:0.2em auto;
-    }
+  .create-test{
+      display:block;
+      margin:0.2em auto;
+  }
+}
+  
+
+.table {
+  width: 500px;
+  display: table;
+  margin: auto;
+
 }
   
   
+@media screen and (max-width: 768px) {
   .table {
-    width: 500px;
-    display: table;
-    margin: auto;
-
+    display: block;
+  }
+}
+  
+.row2 {
+  display: table-row;
+  background: #fff;
+}
+  
+.row2.header {
+  color: #ffffff;
+  background: #6c7ae0;
+}
+  
+@media screen and (max-width: 768px) {
+  .row2 {
+    display: block;
   }
   
-  
-  @media screen and (max-width: 768px) {
-    .table {
-      display: block;
-    }
+  .row2.header {
+    padding: 0;
+    height: 0px;
   }
   
-  .row {
-    display: table-row;
-    background: #fff;
+  .row2.header .cell {
+    display: none;
   }
   
-  .row.header {
-    color: #ffffff;
-    background: #6c7ae0;
+  .row2 .cell:before {
+    font-family: Poppins-Bold;
+    font-size: 12px;
+    color: #808080;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-weight: unset !important;
+  
+    margin-bottom: 13px;
+    content: attr(data-title);
+    min-width: 98px;
+    display: block;
   }
+}
   
-  @media screen and (max-width: 768px) {
-    .row {
-      display: block;
-    }
+.cell {
+  display: table-cell;
+}
   
-    .row.header {
-      padding: 0;
-      height: 0px;
-    }
-  
-    .row.header .cell {
-      display: none;
-    }
-  
-    .row .cell:before {
-      font-family: Poppins-Bold;
-      font-size: 12px;
-      color: #808080;
-      line-height: 1.2;
-      text-transform: uppercase;
-      font-weight: unset !important;
-  
-      margin-bottom: 13px;
-      content: attr(data-title);
-      min-width: 98px;
-      display: block;
-    }
-  }
-  
+@media screen and (max-width: 768px) {
   .cell {
-    display: table-cell;
+    display: block;
   }
+}
   
-  @media screen and (max-width: 768px) {
-    .cell {
-      display: block;
-    }
-  }
+.row2 .cell {
+  font-family: Poppins-Regular;
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.2;
+  font-weight: unset !important;
   
-  .row .cell {
-    font-family: Poppins-Regular;
-    font-size: 15px;
-    color: #666666;
-    line-height: 1.2;
-    font-weight: unset !important;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f2f2f2;
+  text-align: center;
+  background-color: rgb(233, 233, 233);
+}
   
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #f2f2f2;
-    text-align: center;
-    background-color: rgb(233, 233, 233);
-  }
+.row2.header .cell {
+  font-family: Poppins-Regular;
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.2;
+  font-weight: unset !important;
   
-  .row.header .cell {
-    font-family: Poppins-Regular;
-    font-size: 18px;
-    color: #fff;
-    line-height: 1.2;
-    font-weight: unset !important;
-  
-    padding-top: 19px;
-    padding-bottom: 19px;
-    width: 250px;
-    background: #6c7ae0;
-  }
+  padding-top: 19px;
+  padding-bottom: 19px;
+  width: 250px;
+  background: #6c7ae0;
+}
   
 
-  .table, .row {
+  .table, .row2 {
     width: 100% !important;
   }
   
-  .row:hover {
+  .row2:hover {
     background-color: #ececff;
   }
 
@@ -136,7 +141,7 @@
   }
   
   @media (max-width: 768px) {
-    .row {
+    .row2 {
       border-bottom: 1px solid #f2f2f2;
       padding-bottom: 18px;
       padding-top: 30px;
@@ -144,17 +149,17 @@
       margin: 0;
     }
     
-    .row .cell {
+    .row2 .cell {
       border: none;
       padding-left: 30px;
       padding-top: 16px;
       padding-bottom: 16px;
     }
-    .row .cell:nth-child(1) {
+    .row2 .cell:nth-child(1) {
       padding-left: 30px;
     }
     
-    .row .cell {
+    .row2 .cell {
       font-family: Poppins-Regular;
       font-size: 18px;
       color: #555555;
@@ -162,7 +167,7 @@
       font-weight: unset !important;
     }
   
-    .table, .row, .cell {
+    .table, .row2, .cell {
       width: 100% !important;
     }
   }
