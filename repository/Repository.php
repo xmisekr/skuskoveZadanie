@@ -1,5 +1,6 @@
 <?php
-include_once '/home/xpolakovam/public_html/skuskoveZadanieWT2/path.php';
+
+include_once '/home/xhudaks/public_html/skuska/skuskoveZadanie/path.php';
 include_once ROOT_PATH . '/connection/ConnectionFactory.php';
 
 class Repository{
@@ -12,6 +13,7 @@ class Repository{
 
     public function __destruct(){
         $this->connection->close();
+
     }
 }
 

@@ -1,7 +1,9 @@
 <?php
 
-	include_once ("/home/xpolakovam/public_html/skuskoveZadanieWT2/path.php");
-	require_once ROOT_PATH . '/config.php';
+include_once '/home/xhudaks/public_html/skuska/skuskoveZadanie/path.php';
+require_once ROOT_PATH . '/config.php';
+
+
 class ConnectionFactory{
     
     public function __construct(){}

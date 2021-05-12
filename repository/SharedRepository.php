@@ -13,6 +13,7 @@ class SharedRepository extends Repository{
 
     public function executeConditionQuery($sql, $data){
         $statement = $this->connection->prepare($sql);
+
         if ($statement){
             $values = array_values($data);
             $types = str_repeat('s', count($values));
@@ -23,6 +24,7 @@ class SharedRepository extends Repository{
 
         }else{
             $error = $this->connection->error;
+
         }
         
     }
@@ -46,6 +48,7 @@ class SharedRepository extends Repository{
 
         if (empty($conditions)) {
             $statement = $this->connection->prepare($sql);
+
             $statement->execute();
             $records = $statement->get_result()->fetch_all(MYSQLI_ASSOC);
     
@@ -125,6 +128,7 @@ class SharedRepository extends Repository{
             $i++;
         }
         $sql = $sql . ")";
+
         $statement = $this->executeConditionQuery($sql,$data);
         return $statement;
     }
