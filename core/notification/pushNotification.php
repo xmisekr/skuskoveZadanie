@@ -8,20 +8,16 @@ include_once ROOT_PATH . '/repository/SharedRepository.php';
 
 while(true){
     $repository = new SharedRepository();
-    $records = $repository->selectAll('student_test', ['test_id' => $_GET['test_id']]);
+    $records = $repository->selectAll('notification', ['teacher_id' => $_GET['teacher_id']]);
     $data = [];
 
     $i = 0;
     foreach($records as $record){
-        $student = $repository->selectOne('student', ['id' => $record['student_id']]);
-        
         $data[$i] = array(
-            'name' => $student['name'],
-            'surname' => $student['surname'],
-            'in_test' => $record['in_test'],
-            'completed' => $record['completed']
+            'message' => $record['message'],
         );
 
+        $repository->delete('notification', $record['id']);
         $i++;
     }
 

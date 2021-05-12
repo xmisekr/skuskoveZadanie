@@ -1,8 +1,8 @@
 <?php
 class Configuration{
     public $username = 'xhudaks';
-    public $password = '';
-    public $databaseName = '';
-    public $hostname = '';
+    public $password = 'gKZoxPRZK8$#tO';
+    public $databaseName = 'exam';
+    public $hostname = 'localhost';
 }
 ?>
