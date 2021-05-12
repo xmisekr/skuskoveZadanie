@@ -26,25 +26,35 @@
 		}
 	}
 	}
-	function getFromDBSa(){
-		//todo
-	}
 
-	function deleteQuestionSA($answerId, $questionId){
+	function deleteQuestionSA( $questionId){
 		$rep = new SharedRepository();
-		$rep->delete("answer", $answerId);
-		$rep->delete("question", $questionId);
+		$answer = $rep->selectOne("answer", ["question_id"=>$questionId]);
+
+		$rep->delete("answer", $answer["id"]);
+		$rep->delete("question", $questionId);//todo not working check
 
 	}
 
-	function addQuestionTeacherSA(){
-		echo "<input name='Question' placeholder='Question' type='text' ><input name='Answer' placeholder='Answer' type='text'>";
+	function addQuestionTeacherSA($questionId){
+		if ($questionId == null){
+			$namea= "sa ".rand();;
+			$nameq= "sq ".rand();
+			echo "<input name='$nameq' placeholder='Question' type='text' ><input name='$namea' placeholder='Answer' type='text'>";
+		} else{
+			$namea= $questionId." sa";;
+			$nameq= $questionId." sq";
+			$rep = new SharedRepository();
+			$question = $rep->selectOne("question", ["id"=>$questionId]);
+			$answer = $rep->selectOne("answer", ["question_id"=>$questionId]);
+			echo "<input type='text' id='$nameq' name='$nameq' value='".$question["value"]."' > <input id='$namea' name='$namea' value='".$answer["value"]."' type='text'>";
+		}
+
 	}
 	function addQuestionStudentSA($questionId){
 		$rep = new SharedRepository();
-		$question = $rep->selectAll("question", ["id"=>$questionId]);
-
-		echo "<label for='Answer' >".$question["value"]."</label><input name='Answer' placeholder='Answer' type='text'>";
+		$question = $rep->selectOne("question", ["id"=>$questionId]);
+		echo "<label for='".$questionId."' >".$question["value"]."</label><input id='".$questionId."' name='Answer' placeholder='Answer' type='text'>";
 	}
 
 	function submitAnswersSA($studentTestId, $questionId, $answer){
