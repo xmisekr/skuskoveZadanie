@@ -15,6 +15,12 @@ $test = $repository->selectOne('test', ['teacher_id' => 2]);
 $questions = $repository->selectAll('question', ['test_id' => 1]);
 $pairQuestions = $repository->selectAll('question', ['test_id' => 1, 'type' => 'pair']);
 
+//$student_test = $repository->selectOne('student_test', ['id' => $_SESSION['student_test_id']]);
+$test = $repository->selectOne('test', ['teacher_id' => 2]);
+$questions = $repository->selectAll('question', ['test_id' => 1]);
+$pairQuestions = $repository->selectAll('question', ['test_id' => 1, 'type' => 'pair']);
+
+
 $seconds = getTimer(3);
 ?>
 
