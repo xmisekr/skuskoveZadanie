@@ -12,7 +12,32 @@ error_reporting(E_ALL);
 	$rep= new SharedRepository();
 
 	session_start();
-	if (!isset($_SESSION['username']) && !isset($_SESSION['type']) && !isset($_SESSION['studentTestId']))
+	if (!isset($_SESSION['username']) && !isset($_SESSION['type']) && !isset($_SESSION['studentTestId'])){
+		header("location: ../../login.php");
+	}
+	if (isset($_POST)){
+		var_dump($_POST);
+		foreach ($_POST as $questionId => $answer ){
+			echo "<br>id ".$questionId." ans ".$answer;
+			if (strcmp($questionId, "studentId")==0){
+				//just id
+			}else{
+				$q = $rep->selectOne("question", ["id" => $questionId]);
+				if (strcmp($q["type"], "text")==0){
+					submitAnswersSA($_SESSION['studentTestId'], $questionId, $answer);
+				}elseif (strcmp($q["type"], "choice")==0){
+					submitAnswersCh($_SESSION['studentTestId'], $questionId, $answer);
+				}elseif (strcmp($q["type"], "pair")==0){
+					//todo Riso poslat impl
+				}elseif (strcmp($q["type"], "math")==0){
+					//todo Marian poslat impl
+				}elseif (strcmp($q["type"], "drawing")==0){
+					//todo Marian poslat impl
+				}
+			}
+		}
+		//header("location: submit.php");//todo
+	}
 	echo $_SESSION['username'].$_SESSION['type'].$_SESSION['studentTestId'];
 	$studentTest = $rep->selectOne("student_test", ["id"=>$_SESSION['studentTestId']]);
 	$questions = $rep->selectAll("question", ["test_id" => $studentTest["test_id"]]);
@@ -41,7 +66,7 @@ error_reporting(E_ALL);
                 <div id="controls"></div>
                 <input id="timer_id" type="hidden" value="3">
             </div>
-	    <form action="test.php">
+	    <form action="test.php" method="post">
             <input type="hidden" name="studentId" id="studentId" value="<?php echo $studentTest["student_id"] ?>">
 		    <div class="col " id="formDiv">
 
