@@ -1,6 +1,6 @@
 <?php
 class Configuration{
-    public $username = 'xhudaks';
+    public $username = '';
     public $password = '';
     public $databaseName = 'exam';
     public $hostname = 'localhost';

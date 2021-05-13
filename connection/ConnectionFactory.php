@@ -1,6 +1,6 @@
 <?php
 
-include_once '/home/xhudaks/public_html/skuska/skuskoveZadanie/path.php';
+include_once __DIR__ . '/../path.php';
 require_once ROOT_PATH . '/config.php';
 
 

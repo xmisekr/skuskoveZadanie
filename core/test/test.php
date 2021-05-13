@@ -8,49 +8,42 @@ session_start();
 include_once '../../path.php';
 include_once ROOT_PATH . '/core/timer/timer.php';
 include_once ROOT_PATH . '/repository/SharedRepository.php';
-include_once ROOT_PATH . "/questions/ShortAnswerQuestion.php");
-include_once ROOT_PATH . "/questions/ChoiceQuestion.php");
+include_once ROOT_PATH . "/questions/ShortAnswerQuestion.php";
+include_once ROOT_PATH . "/questions/ChoiceQuestion.php";
 
 $repository = new SharedRepository();
-//$student_test = $repository->selectOne('student_test', ['id' => $_SESSION['student_test_id']]);
-$test = $repository->selectOne('test', ['teacher_id' => 2]);
 $questions = $repository->selectAll('question', ['test_id' => 1]);
-$pairQuestions = $repository->selectAll('question', ['test_id' => 1, 'type' => 'pair']);
+$studentTest = $repository->selectOne("student_test", ["id" => $_SESSION['studentTestId']]);
+$test = $repository->selectOne("test", ["id" => $studentTest['test_id']]);
+$questions = $repository->selectAll("question", ["test_id" => $studentTest["test_id"]]);
+$pairQuestions = $repository->selectAll('question', ['test_id' => $studentTest["test_id"], 'type' => 'pair']);
 
-	if (!isset($_SESSION['username']) && !isset($_SESSION['type']) && !isset($_SESSION['studentTestId'])){
-		header("location: ../../login.php");
-	}
+$seconds = getTimer($studentTest["timer_id"]);
 
-	if (isset($_POST)){
-		var_dump($_POST);
-		foreach ($_POST as $questionId => $answer ){
-			echo "<br>id ".$questionId." ans ".$answer;
-			if (strcmp($questionId, "studentId")==0){
-				//just id
-			}else{
-				$q = $rep->selectOne("question", ["id" => $questionId]);
-				if (strcmp($q["type"], "text")==0){
-					submitAnswersSA($_SESSION['studentTestId'], $questionId, $answer);
-				}elseif (strcmp($q["type"], "choice")==0){
-					submitAnswersCh($_SESSION['studentTestId'], $questionId, $answer);
-				}elseif (strcmp($q["type"], "pair")==0){
-					//todo Riso poslat impl
-				}elseif (strcmp($q["type"], "math")==0){
-					//todo Marian poslat impl
-				}elseif (strcmp($q["type"], "drawing")==0){
-					//todo Marian poslat impl
-				}
-			}
+if (!isset($_SESSION['username']) && !isset($_SESSION['type']) && !isset($_SESSION['studentTestId'])){
+	header("location: ../../login.php");
+}
+
+if (isset($_POST)){
+	var_dump($_POST);
+	foreach ($_POST as $questionId => $answer ){
+		echo "<br>id ".$questionId." ans ".$answer;
+		if (strcmp($questionId, "studentId")==0){
+			//just id
+		}else{
+			$q = $repository->selectOne("question", ["id" => $questionId]);
+			if (strcmp($q["type"], "text")==0){
+				submitAnswersSA($_SESSION['studentTestId'], $questionId, $answer);
+			}elseif (strcmp($q["type"], "choice")==0){
+				submitAnswersCh($_SESSION['studentTestId'], $questionId, $answer);
+            }
 		}
-		//header("location: submit.php");//todo
 	}
-	echo $_SESSION['username'].$_SESSION['type'].$_SESSION['studentTestId'];
+	//header("location: submit.php");//todo
+}
+echo $_SESSION['username'].$_SESSION['type'].$_SESSION['studentTestId'];
 
-	$studentTest = $rep->selectOne("student_test", ["id"=>$_SESSION['studentTestId']]);
-	$questions = $rep->selectAll("question", ["test_id" => $studentTest["test_id"]]);
-	$test = $rep->selectOne("test", ["id"=>$studentTest['test_id']]);
-
-	$seconds = getTimer($studentTest["timer_id"]);
+	
 ?>
 
 <!DOCTYPE html>
@@ -72,9 +65,9 @@ $pairQuestions = $repository->selectAll('question', ['test_id' => 1, 'type' => '
             <input type="hidden" name="student_name" id="student_name" value="<?php echo $_SESSION['username'] ?>">
             <input type="hidden" name="student_surname" id="student_surname" value="<?php echo $_SESSION['lastname'] ?>">
             <input type="hidden" name="teacher_id" id="teacher_id" value="<?php echo $test['teacher_id'] ?>">
-            <input type="hidden" name="student_test_id" id="student_test_id" value="20">
+            <input type="hidden" name="student_test_id" id="student_test_id" value="<?php echo $_SESSION['studentTestId']?>">
             
-            <h1>Welcome, <?php echo $_SESSION["username"]?>. Your test name is <?php echo $test["name"]?> </h1>
+            <h1>Welcome, <?php echo $_SESSION["username"] . " " . $_SESSION["lastname"] ?>. Your test name is <?php echo $test["name"]?> </h1>
 
 
             <div class="center-container">
@@ -83,7 +76,7 @@ $pairQuestions = $repository->selectAll('question', ['test_id' => 1, 'type' => '
                     <span class="time-remaining">Time remaining:</span>
                     <div class="countdown" data-seconds-left=<?php echo $seconds ?> ></div>
                     <div id="controls"></div>
-                    <input id="timer_id" type="hidden" value="3">
+                    <input id="timer_id" type="hidden" value="<?php echo $studentTest["timer_id"] ?>">
                 </div>
 
 
@@ -114,32 +107,30 @@ $pairQuestions = $repository->selectAll('question', ['test_id' => 1, 'type' => '
                     
                 <?php endif; ?>
               
-              <form action="test.php" method="post">
-                <input type="hidden" name="studentId" id="studentId" value="<?php echo $studentTest["student_id"] ?>">
-                <div class="col " id="formDiv">
+              <!-- Choice and Short Questions -->
+                <form action="test.php" method="post" class="ajax">
+                    <input type="hidden" name="studentId" id="studentId" value="<?php echo $studentTest["student_id"] ?>">
+                    <div class="col " id="formDiv">
 
-                <?php
+                    <?php
 
-                  foreach ($questions as $question){
-                    echo "<div class='form-group'>";
-                    if (strcmp($question["type"], "text")==0){
-                      addQuestionStudentSA($question["id"]);
-                    }elseif (strcmp($question["type"], "choice")==0){
-                    addQuestionStudentCh($question["id"]);
+                    foreach ($questions as $question){
+                        echo "<div class='form-group'>";
+                        if (strcmp($question["type"], "text")==0){
+                        addQuestionStudentSA($question["id"]);
+                        }elseif (strcmp($question["type"], "choice")==0){
+                        addQuestionStudentCh($question["id"]);
 
+                        }
+                    echo "</div>";
                     }
-                  echo "</div>";
-                  }
 
-                ?>
-                  <button type="submit" class="btn btn-lg btn-info btn-block"  >Submit test</button>
-                </div>
+                    ?>
+
+                    <button type="submit" id="submit" class="btn btn-lg btn-info btn-block"  >Submit test</button>
+                
 	            </form>
 
-
-                <div class="new-test">
-                    <a href="#" id="submit" class="create-test">Submit</a>
-                </div>
             </div>
 
         

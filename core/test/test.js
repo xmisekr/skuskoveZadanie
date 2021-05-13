@@ -38,23 +38,57 @@ function submitPairQuestions(){
         }
         
     }
-    console.log(formData);
+    
 
     $.ajax({
         method: 'POST',
         url: "submitTest.php",
         data: {arr: JSON.stringify(formData)},
         success: function(){
+            
         }
         
     
     })
+
    
 }
 
-var submit = document.getElementById('submit');
-submit.addEventListener('click', ()=>{
+//sends all
+$('form.ajax').on('submit', function() {
     submitPairQuestions();
-})
+    
+    var that = $(this),
+        url = that.attr('action'),
+        type = that.attr('method'),
+        data = {};
+
+    that.find('[name]').each(function(index, value) {
+        var that = $(this),
+            name = that.attr('name'),
+            value = that.val();
+
+            if (that.attr('type') != "radio"){
+                data[name] = value;
+                console.log("hit");
+
+            }else{
+                if (that.is(':checked')){
+                    data[name] = value;
+                }
+            }
+
+        
+    });
+
+    $.ajax({
+        url: url,
+        method: type,
+        data: data,
+        success: function(){}
+    });
+
+    return false;
+});
 
 

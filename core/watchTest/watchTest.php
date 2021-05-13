@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['id']) && !isset($_SESSION['type'])){
+	header("location: ../../login.php");
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="sk">
@@ -12,9 +20,8 @@
     </head>
         
     <body>
-        <input type="hidden" name="student_name" id="student_name" value="Samuel">
-        <input type="hidden" name="student_surname" id="student_surname" value="Hudak">
-        <input type="hidden" name="teacher_id" id="teacher_id" value="1">
+      
+        <input type="hidden" name="teacher_id" id="teacher_id" value="<?php echo $_SESSION['id'] ?>">
 
         <section class="watch-test">
             <input id="test_id" type="hidden" value="<?php echo $_GET['test_id'] ?>">

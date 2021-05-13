@@ -41,7 +41,7 @@
 				$_SESSION['type']= "teacher";
 				$_SESSION['id']= $user['id'];
 				$id = $user['id'];
-				header("location: index.php");//TODO set page
+				header("location: core/dashboard/dashboard.php");
 			}else{
 				echo "<p style='background-color: #ffcccb; font-size: 25px'>Wrong password</p>";
 			}}else{
@@ -65,14 +65,9 @@
 					$stmStudent->bindParam(':surname', $_POST["lastName"]);
 					$stmStudent->execute();
 
-
-					$sql = $conn->prepare("SELECT * FROM student WHERE pid = :pid & name =:name & surname = :surname");
-					$sql->bindParam(':pid', $_POST["idNumber"]);
-					$sql->bindParam(':name', $_POST["firstName"]);
-					$sql->bindParam(':surname', $_POST["lastName"]);
-					$sql->execute();
-					$student = $sql->fetch(PDO::FETCH_ASSOC);
-
+					$rep = new SharedRepository();
+					$student = $rep->selectOne('student', ['pid' => $_POST['idNumber'], 'name' => $_POST['firstName'], 'surname' => $_POST['lastName']]);
+					
 					$stmTestTimer = $conn->prepare("SELECT * FROM timer WHERE id = :timerId");
 					$stmTestTimer->bindParam(':timerId', $exam["timer_id"]);
 					$stmTestTimer->execute();
@@ -83,7 +78,7 @@
 					$a = $rep->insert("timer", ["hours" => $testTimer["hours"], "minutes" => $testTimer["minutes"], "seconds" => $testTimer["seconds"]]);
 
 					$timerId = $a->insert_id;
-					$stmStudent = $conn->prepare("INSERT INTO student_test (student_id, test_id, completed, in_test, timer_id) VALUES (:studentId, :testId, 0,0, :timerId)");
+					$stmStudent = $conn->prepare("INSERT INTO student_test (student_id, test_id, completed, in_test, timer_id) VALUES (:studentId, :testId, 0,1, :timerId)");
 					$stmStudent->bindParam(':studentId', $student["id"]);
 					$stmStudent->bindParam(':testId', $exam["id"]);
 					$stmStudent->bindParam(':timerId', $timerId);
@@ -96,7 +91,8 @@
 					$stmStudent = $conn->prepare("SELECT * FROM student_test WHERE student_id = " . $student['id'] . " AND test_id = " . $exam["id"] . "  ");
 					$stmStudent->execute();
 					$student = $stmStudent->fetch(PDO::FETCH_ASSOC);
-					$_SESSION['username'] = $_POST["firstName"] . " " . $_POST["lastName"];
+					$_SESSION['username'] = $_POST["firstName"];
+					$_SESSION['lastname'] = $_POST["lastName"];
 					$_SESSION['type'] = "student";
 					$_SESSION['studentTestId'] = $student["id"];
 
