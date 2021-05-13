@@ -20,7 +20,6 @@ $pairQuestions = $repository->selectAll('question', ['test_id' => 1, 'type' => '
 
 $seconds = getTimer(3);
 ?>
-
 <!DOCTYPE html>
 <html lang="sk">
     <head>
