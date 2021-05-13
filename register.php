@@ -29,6 +29,8 @@
 						 $query->execute([$_POST["email"]]);
 						$id = $query->fetch();
 						$_SESSION['username']=$_POST["email"];
+						$_SESSION['type']= "teacher";
+						$_SESSION['id']= $id['id'];
 						header("location: index.php");//todo to teacher index
 					}catch (Exception $e){
 						echo "Connection failed: " . $e->getMessage();
