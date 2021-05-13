@@ -2,7 +2,7 @@
 class Configuration{
     public $username = 'xhudaks';
     public $password = '';
-    public $databaseName = '';
-    public $hostname = '';
+    public $databaseName = 'exam';
+    public $hostname = 'localhost';
 }
 ?>

@@ -19,7 +19,7 @@ function createRows(data){
 
     for (let i = 0; i < data.length; i++){
         let row = document.createElement('tr');
-        row.classList.add("row");
+        row.classList.add("row2");
 
         let name = document.createElement('td');
         name.innerHTML = data[i]['name'];
