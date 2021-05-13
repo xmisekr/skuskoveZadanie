@@ -6,7 +6,8 @@
   	<title>Sign In</title>
 	<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 	      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" rel="stylesheet">
-	<link href="style/style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="style/main-styles.css">
+	<link href="style/style-register.css" rel="stylesheet" type="text/css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 </head>
@@ -19,15 +20,14 @@
 	error_reporting(E_ALL);
 
 	session_start();
+	include_once ("repository/SharedRepository.php");
 
 	require_once("app/Database.php");
 	$conn = (new Database())->createConnectioon();
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		echo "post";
-		var_dump($_POST);
+
 		if (isset($_POST["password"]) && isset($_POST["email"]) && !empty($_POST["password"])  && !empty($_POST["email"]) ){
 			//teacher
-			echo "teacher";
 			$sql = "SELECT * FROM teacher WHERE email = ?";
 
 			$stm = $conn->prepare($sql);
@@ -35,13 +35,12 @@
 
 			$user = $stm->fetch(PDO::FETCH_ASSOC);
 
-			//var_dump($user);
 			if (isset($user['password'])){
 			if (password_verify($_POST['password'], $user['password'])){
 				$_SESSION['username']=$_POST["email"];
 				$_SESSION['type']= "teacher";
+				$_SESSION['id']= $user['id'];
 				$id = $user['id'];
-				//echo "successfully";
 				header("location: index.php");//TODO set page
 			}else{
 				echo "<p style='background-color: #ffcccb; font-size: 25px'>Wrong password</p>";
@@ -58,33 +57,53 @@
 
 			$exam = $stm->fetch(PDO::FETCH_ASSOC);
 
-			//var_dump($exam);
 			if (isset($exam['id'])){
-				//echo "successfully";
-				echo "student";
-				$stmStudent= $conn->prepare("INSERT IGNORE INTO student (pid, name, surname) VALUES (:pid, :name, :surname)");
-				$stmStudent -> bindParam(':pid', $_POST["idNumber"]);
-				$stmStudent -> bindParam(':name', $_POST["firstName"]);
-				$stmStudent -> bindParam(':surname', $_POST["lastName"]);
-				$stmStudent->execute();
-				$_SESSION["tape"]="student";
-				$_SESSION["username"]= $_POST["firstName"];
-
-				$sql = $conn->prepare("SELECT * FROM student WHERE pid = :pid & name =:name & surname = :surname");
-				$sql -> bindParam(':pid', $_POST["idNumber"]);
-				$sql -> bindParam(':name', $_POST["firstName"]);
-				$sql -> bindParam(':surname', $_POST["lastName"]);
-				$sql->execute();
-				$student = $sql->fetch(PDO::FETCH_ASSOC);
+				if ($exam['active']==1) {
+					$stmStudent = $conn->prepare("INSERT IGNORE INTO student (pid, name, surname) VALUES (:pid, :name, :surname)");
+					$stmStudent->bindParam(':pid', $_POST["idNumber"]);
+					$stmStudent->bindParam(':name', $_POST["firstName"]);
+					$stmStudent->bindParam(':surname', $_POST["lastName"]);
+					$stmStudent->execute();
 
 
+					$sql = $conn->prepare("SELECT * FROM student WHERE pid = :pid & name =:name & surname = :surname");
+					$sql->bindParam(':pid', $_POST["idNumber"]);
+					$sql->bindParam(':name', $_POST["firstName"]);
+					$sql->bindParam(':surname', $_POST["lastName"]);
+					$sql->execute();
+					$student = $sql->fetch(PDO::FETCH_ASSOC);
 
-				$stmStudent= $conn->prepare("INSERT INTO student_test (student_id, test_id, completed, in_test) VALUES (:studentId, :testId, 0,0)");
-				$stmStudent -> bindParam(':studentId', $student["id"]);
-				$stmStudent -> bindParam(':testId', $exam["id"]);
-				$stmStudent->execute();
+					$stmTestTimer = $conn->prepare("SELECT * FROM timer WHERE id = :timerId");
+					$stmTestTimer->bindParam(':timerId', $exam["timer_id"]);
+					$stmTestTimer->execute();
+					$testTimer = $stmTestTimer->fetch(PDO::FETCH_ASSOC);
+					$rep = new SharedRepository();
 
-				//header("location: index.php");//TODO set page
+
+					$a = $rep->insert("timer", ["hours" => $testTimer["hours"], "minutes" => $testTimer["minutes"], "seconds" => $testTimer["seconds"]]);
+
+					$timerId = $a->insert_id;
+					$stmStudent = $conn->prepare("INSERT INTO student_test (student_id, test_id, completed, in_test, timer_id) VALUES (:studentId, :testId, 0,0, :timerId)");
+					$stmStudent->bindParam(':studentId', $student["id"]);
+					$stmStudent->bindParam(':testId', $exam["id"]);
+					$stmStudent->bindParam(':timerId', $timerId);
+
+					try {
+						$stmStudent->execute();
+					} catch (Exception $exception) {
+						echo "<p style='background-color: #ffcccb; font-size: 25px'>You have already logged into test. You cant do it again.</p>";
+					}
+					$stmStudent = $conn->prepare("SELECT * FROM student_test WHERE student_id = " . $student['id'] . " AND test_id = " . $exam["id"] . "  ");
+					$stmStudent->execute();
+					$student = $stmStudent->fetch(PDO::FETCH_ASSOC);
+					$_SESSION['username'] = $_POST["firstName"] . " " . $_POST["lastName"];
+					$_SESSION['type'] = "student";
+					$_SESSION['studentTestId'] = $student["id"];
+
+					header("location: core/test/test.php");
+				}else{
+					echo "<p style='background-color: #ffcccb; font-size: 25px'>Test cant be filled.</p>";
+				}
 			}else{
 				echo "<p style='background-color: #ffcccb; font-size: 25px'>Exam code does not exist</p>";
 			}
