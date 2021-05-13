@@ -5,6 +5,9 @@
     <title>Work division</title>
 	<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 		  integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" rel="stylesheet">
+
+	<link href="style/styles-checklist.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="style/main-styles.css">
 </head>
 <body class="background">
 
@@ -99,7 +102,7 @@
 			<th>Student test</th>
 			<th></th>
 			<th>&#10004;</th>
-			<th></th>
+			<th>&#10004;</th>
 			<th></th>
 			<th></th>
 		</tr>
@@ -143,6 +146,14 @@
 			<th></th>
 			<th></th>
 		</tr>
+		<tr>
+			<th>Github creation </th>
+			<th></th>
+			<th></th>
+			<th></th>
+			<th>&#10004;</th>
+			<th></th>
+		</tr>
 	</table>
 	<br>
 	<br>
@@ -150,11 +161,6 @@
 </div>
 
 
-
-<script src="../navbar/nav-bar.js"></script>
-<script src="../navbar/index.js"></script>
-<script src="../visit-counter/js.js"></script>
-<script src="../breadcrumbs/bredcrumb.js"></script>
 
 </body>
 </html>

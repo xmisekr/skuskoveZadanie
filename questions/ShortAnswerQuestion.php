@@ -54,7 +54,7 @@
 	function addQuestionStudentSA($questionId){
 		$rep = new SharedRepository();
 		$question = $rep->selectOne("question", ["id"=>$questionId]);
-		echo "<label for='".$questionId."' >".$question["value"]."</label><input class='form-control' id='".$questionId."' name='Answer' placeholder='Answer' type='text'>";
+		echo "<label for='".$questionId."' >".$question["value"]."</label><input class='form-control' id='".$questionId."' name='".$questionId."' placeholder='Answer' type='text'>";
 	}
 
 	function submitAnswersSA($studentTestId, $questionId, $answer){

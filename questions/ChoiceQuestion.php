@@ -119,7 +119,7 @@
 		$question = $rep->selectOne("question", ["id"=>$questionId]);
 		$answers = $rep->selectAll("answer", ["question_id"=>$questionId]);
 
-		echo "<p>".$question["value"]."</p>";
+		echo "<p>".$question["value"]."<fieldset id='".$questionId."'></p>";
 		foreach ($answers as $answer){
 			if (!empty( $answer["value"])){
 				echo " <input  type='radio' id='".$answer["value"]."' name='".$questionId."' value='".$answer["value"]."'>
@@ -130,7 +130,7 @@
   				<label for='".$answer["correct"]."'>".$answer["value"]."</label><br>";
 				}
 			}
-		}
+		}echo "</fieldset>";
 
 	}
 

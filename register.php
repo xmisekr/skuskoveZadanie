@@ -6,7 +6,8 @@
   <title>Register</title>
 	<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 		  integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" rel="stylesheet">
-	<link href="style/style.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="style/main-styles.css">
+	<link href="style/style-register.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<article>
@@ -31,7 +32,7 @@
 						$_SESSION['username']=$_POST["email"];
 						$_SESSION['type']= "teacher";
 						$_SESSION['id']= $id['id'];
-						header("location: index.php");//todo to teacher index
+						header("location: core/dashboard/dashboard.php");
 					}catch (Exception $e){
 						echo "Connection failed: " . $e->getMessage();
 					}
