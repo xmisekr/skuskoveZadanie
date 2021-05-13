@@ -122,11 +122,11 @@
 		echo "<p>".$question["value"]."</p>";
 		foreach ($answers as $answer){
 			if (!empty( $answer["value"])){
-				echo " <input type='radio' id='".$answer["value"]."' name='".$questionId."' value='".$answer["value"]."'>
+				echo " <input  type='radio' id='".$answer["value"]."' name='".$questionId."' value='".$answer["value"]."'>
   				<label for='".$answer["value"]."'>".$answer["value"]."</label><br>";
 			}else{
 				if ( strcmp($answer["correct"], "true")== 0){
-					echo " <input type='radio' id='".$answer["correct"]."' name='".$questionId."' value=' '>
+					echo " <input class='form-control' type='radio' id='".$answer["correct"]."' name='".$questionId."' value=' '>
   				<label for='".$answer["correct"]."'>".$answer["value"]."</label><br>";
 				}
 			}

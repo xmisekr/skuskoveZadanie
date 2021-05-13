@@ -3,13 +3,22 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include_once '../../path.php';
-include_once ROOT_PATH . '/core/timer/timer.php';
-include_once ROOT_PATH . '/repository/SharedRepository.php';
+	include_once '../../path.php';
+	include_once ROOT_PATH . '/core/timer/timer.php';
+	include_once ROOT_PATH . '/repository/SharedRepository.php';
+	include_once(ROOT_PATH . "/questions/ShortAnswerQuestion.php");
+	include_once (ROOT_PATH . "/questions/ChoiceQuestion.php");
 
-$repository = new SharedRepository();
+	$rep= new SharedRepository();
 
-$seconds = getTimer(3);
+	session_start();
+	if (!isset($_SESSION['username']) && !isset($_SESSION['type']) && !isset($_SESSION['studentTestId']))
+	echo $_SESSION['username'].$_SESSION['type'].$_SESSION['studentTestId'];
+	$studentTest = $rep->selectOne("student_test", ["id"=>$_SESSION['studentTestId']]);
+	$questions = $rep->selectAll("question", ["test_id" => $studentTest["test_id"]]);
+	$test = $rep->selectOne("test", ["id"=>$studentTest['test_id']]);
+
+	$seconds = getTimer($studentTest["timer_id"]);
 ?>
 
 <!DOCTYPE html>
@@ -26,16 +35,38 @@ $seconds = getTimer(3);
     </head>
         
     <body>
-        <input type="hidden" name="student_name" id="student_name" value="<?php echo $_GET['a'] ?>">
-        <input type="hidden" name="student_surname" id="student_surname" value="<?php echo $_GET['b'] ?>">
-        <input type="hidden" name="teacher_id" id="teacher_id" value="1">
+	    <h1>Welcome, <?php echo $_SESSION["username"]?>. Your test name is <?php echo $test["name"]?> </h1>
+	    <div class="timer">
+                <div class="countdown" data-seconds-left=<?php echo $seconds ?> ></div>
+                <div id="controls"></div>
+                <input id="timer_id" type="hidden" value="3">
+            </div>
+	    <form action="test.php">
+            <input type="hidden" name="studentId" id="studentId" value="<?php echo $studentTest["student_id"] ?>">
+		    <div class="col " id="formDiv">
 
-        <div class="timer">
-            <div class="countdown" data-seconds-left=<?php echo $seconds ?> ></div>
-            <div id="controls"></div>
-            <input id="timer_id" type="hidden" value="3">
-        </div>
-        
+		    <?php
+
+			    foreach ($questions as $question){
+			    	echo "<div class='form-group'>";
+			    	if (strcmp($question["type"], "text")==0){
+			    		addQuestionStudentSA($question["id"]);
+				    }elseif (strcmp($question["type"], "choice")==0){
+						addQuestionStudentCh($question["id"]);
+				    }elseif (strcmp($question["type"], "pair")==0){
+						//todo Riso poslat impl
+				    }elseif (strcmp($question["type"], "math")==0){
+						//todo Marian poslat impl
+				    }elseif (strcmp($question["type"], "drawing")==0){
+			    		//todo Marian poslat impl
+				    }
+					echo "</div>";
+			    }
+
+		    ?>
+			    <button type="submit" class="btn btn-lg btn-info btn-block"  >Submit test</button>
+		    </div>
+	    </form>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
