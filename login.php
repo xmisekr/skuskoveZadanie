@@ -1,3 +1,11 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+?>
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -15,11 +23,7 @@
 		<form action="login.php" method="post">
 			<div class="col text-center" id="formDiv" style="max-width: 330px">
 				<?php
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
 
-	session_start();
 	include_once ("repository/SharedRepository.php");
 
 	require_once("app/Database.php");
