@@ -2,8 +2,14 @@
 include_once '../../path.php';
 include_once ROOT_PATH . '/repository/SharedRepository.php';
 
+session_start();
+
+if (!isset($_SESSION['id']) && !isset($_SESSION['type'])){
+	header("location: ../../login.php");
+}
+
 $repository = new SharedRepository();
-$tests = $repository->selectAll('test', ['teacher_id' => $_GET['teacher_id']]);
+$tests = $repository->selectAll('test', ['teacher_id' => $_SESSION['id']]);
 
 
 if (isset($_POST['test_id'], $_POST['active'])){
@@ -24,15 +30,13 @@ if (isset($_POST['test_id'], $_POST['active'])){
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+		<link rel="stylesheet" href="../../style/main-styles.css">
         <title>Dashboard</title>
     </head>
 
     <body>
-      
-        <input type="hidden" name="student_name" id="student_name" value="Samuel">
-        <input type="hidden" name="student_surname" id="student_surname" value="Hudak">
-        <input type="hidden" name="teacher_id" id="teacher_id" value="1">
+    
+        <input type="hidden" name="teacher_id" id="teacher_id" value="<?php echo $_SESSION['id'] ?>">
 
         <section class="dashboard">
         
