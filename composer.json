@@ -1,0 +1,12 @@
+{
+    "name": "root/html",
+    "authors": [
+        {
+            "name": "Antonia Ivanicova",
+            "email": "tonka.ivanicova@gmail.com"
+        }
+    ],
+    "require": {
+        "tecnickcom/tcpdf": "^6.4"
+    }
+}
