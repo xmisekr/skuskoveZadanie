@@ -26,7 +26,7 @@ class SharedRepository extends Repository{
             $error = $this->connection->error;
 
         }
-        
+        return null;
     }
 
     private function joinConditions($sql, $conditions){
@@ -61,6 +61,12 @@ class SharedRepository extends Repository{
 
       
         return $records;
+    }
+
+    public function findById(string $tableName, int $id): ?array {
+        return $this->selectOne($tableName, [
+            'id' => $id,
+        ]);
     }
 
     public function selectOne($table, $conditions){

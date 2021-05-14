@@ -1,6 +1,48 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+const APP_ROOT_PATH = __DIR__ . '/..';
+
+require_once APP_ROOT_PATH . '/vendor/autoload.php';
+
+// Loadovanie databazy
+require_once APP_ROOT_PATH . '/repository/model/Export.php';
+
+$id = $_GET['id'] ?? null;
+
+if ($id === null) {
+    header("location: {$_SERVER['HTTP_REFERER']}");
+}
+
+$export = new Export();
+var_dump($export->getStudentTest($id));
+$odpovede = [
+    [
+        'totalPossibleScore' => 5,
+        'score'=> 1,
+        'questions'=>[
+            '1.' => "Som najlepsia?",
+            '2.' => "Som najlepsia?",
+            '3.' => "Som najlepsia?",
+            '4.' => "Som najlepsia?",
+            '5.' => "Som najlepsia?"
+        ],
+        'answers' =>[
+            '1.' => "ano",
+            '2.' => "jasne",
+            '3.' => "yes",
+            '4.' => "igen",
+            '5.' => "si"
+        ],
+        'rightAnswers' =>[
+            '1.' => "jj",
+            '2.' => "jasne",
+            '3.' => "jj",
+            '4.' => "jj",
+            '5.' => "jj"
+        ]
+    ]
+];
+
 
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -58,33 +100,6 @@ $pdf->AddPage();
 
 // set text shadow effect
 $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
-$odpovede = [
-    [
-        'totalPossibleScore' => 5,
-        'score'=> 1,
-        'questions'=>[
-            '1.' => "Som najlepsia?",
-            '2.' => "Som najlepsia?",
-            '3.' => "Som najlepsia?",
-            '4.' => "Som najlepsia?",
-            '5.' => "Som najlepsia?"
-        ],
-        'answers' =>[
-            '1.' => "ano",
-            '2.' => "jasne",
-            '3.' => "yes",
-            '4.' => "igen",
-            '5.' => "si"
-        ],
-        'rightAnswers' =>[
-            '1.' => "jj",
-            '2.' => "jasne",
-            '3.' => "jj",
-            '4.' => "jj",
-            '5.' => "jj"
-        ]
-    ]
-];
 
 
 $testOtazky = '
