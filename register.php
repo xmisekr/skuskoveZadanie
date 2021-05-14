@@ -1,4 +1,9 @@
-
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +17,7 @@
 <body>
 	<article>
 	<?php
-		ini_set('display_errors', 1);
-		ini_set('display_startup_errors', 1);
-		error_reporting(E_ALL);
-		session_start();
+
 		require_once("app/Database.php");
 		if($_SERVER["REQUEST_METHOD"] == "POST"){
 			if (isset($_POST["email"]) && isset($_POST["psw"]) && isset($_POST["psw-repeat"])){
