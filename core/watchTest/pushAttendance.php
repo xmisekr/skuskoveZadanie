@@ -15,12 +15,13 @@ while(true){
     foreach($records as $record){
         $student = $repository->selectOne('student', ['id' => $record['student_id']]);
         
-        $data[$i] = array(
+        $data[$i] = [
+            'id' => $record['id'],
             'name' => $student['name'],
             'surname' => $student['surname'],
             'in_test' => $record['in_test'],
             'completed' => $record['completed']
-        );
+        ];
 
         $i++;
     }
@@ -32,4 +33,3 @@ while(true){
 
     sleep(1);
 }
-?>

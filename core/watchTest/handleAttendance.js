@@ -4,7 +4,7 @@ if(typeof(EventSource) !== "undefined") {
 
     source.addEventListener("message", function(e) {
         var data = JSON.parse(e.data);
-   
+        console.log(data)
         createRows(data);
 
     }, false);
@@ -56,6 +56,13 @@ function createRows(data){
         }
         completed.appendChild(icon);
         row.appendChild(completed);
+
+
+        let exportCell = document.createElement('td');
+        exportCell.classList.add("cell");
+
+        exportCell.innerHTML = `<a href="/export/student_test.php?id=${data[i]["id"]}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a>`
+        row.appendChild(exportCell);
 
         tbody.appendChild(row);
     }

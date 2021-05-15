@@ -42,6 +42,7 @@ if (!isset($_SESSION['id']) && !isset($_SESSION['type'])){
                             <th class="users-surname cell">Surname</th>
                             <th class="users-in-test cell">In test</th>
                             <th class="users-completed cell">Completed</th>
+                            <th class="export cell">Export</th>
                         </tr>
                     </thead>
 

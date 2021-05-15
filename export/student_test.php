@@ -2,10 +2,12 @@
 
 const APP_ROOT_PATH = __DIR__ . '/..';
 
+const PDF_HEADER_FONT_SIZE = 12;
 require_once APP_ROOT_PATH . '/vendor/autoload.php';
 
 // Loadovanie databazy
 require_once APP_ROOT_PATH . '/repository/model/Export.php';
+require_once APP_ROOT_PATH . '/helper/Pdf.php';
 
 $id = $_GET['id'] ?? null;
 
@@ -14,35 +16,7 @@ if ($id === null) {
 }
 
 $export = new Export();
-var_dump($export->getStudentTest($id));
-$odpovede = [
-    [
-        'totalPossibleScore' => 5,
-        'score'=> 1,
-        'questions'=>[
-            '1.' => "Som najlepsia?",
-            '2.' => "Som najlepsia?",
-            '3.' => "Som najlepsia?",
-            '4.' => "Som najlepsia?",
-            '5.' => "Som najlepsia?"
-        ],
-        'answers' =>[
-            '1.' => "ano",
-            '2.' => "jasne",
-            '3.' => "yes",
-            '4.' => "igen",
-            '5.' => "si"
-        ],
-        'rightAnswers' =>[
-            '1.' => "jj",
-            '2.' => "jasne",
-            '3.' => "jj",
-            '4.' => "jj",
-            '5.' => "jj"
-        ]
-    ]
-];
-
+$exportData = $export->getStudentTest($id);
 
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -50,17 +24,18 @@ $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Nicola Asuni');
-$pdf->SetTitle('TCPDF Example 001');
-$pdf->SetSubject('TCPDF Tutorial');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf->SetTitle('Student test export');
 
 // set default header data
 //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001', PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-$pdf->SetHeaderData();
-$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+$pdf->SetHeaderData(
+    ht: 'Test: ' . $exportData["test"]["test"]["name"],
+    hs: 'Submitted by: ' . $exportData["student"]["name"].' '. $exportData["student"]["surname"]. ' PID: '. $exportData["student"]["pid"]
+);
+$pdf->setFooterData([0, 64, 0], [0, 64, 128]);
 
 // set header and footer fonts
-$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_HEADER_FONT_SIZE]);
 $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
@@ -77,16 +52,11 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-// set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
-    require_once(dirname(__FILE__) . '/lang/eng.php');
-    $pdf->setLanguageArray($l);
-}
 
 // ---------------------------------------------------------
 
 // set default font subsetting mode
-$pdf->setFontSubsetting(true);
+$pdf->setFontSubsetting();
 
 // Set font
 // dejavusans is a UTF-8 Unicode font, if you only need to
@@ -98,32 +68,14 @@ $pdf->SetFont('dejavusans', '', 14, '', true);
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage();
 
-// set text shadow effect
-$pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
-
-
-$testOtazky = '
-<h1>Test</h1>
-<p></p>
-';
-
-// Set some content to print
-$html = '
-<i>This is the first example of TCPDF library.</i>+
-<p>This text is printed using the <i>writeHTMLCell()</i> method but you can also use: <i>Multicell(), writeHTML(), Write(), Cell() and Text()</i>.</p>
-<p>Please check the source code documentation and other examples for further information.</p>
-
-';
-
-// Print text using writeHTMLCell()
-
-$pdf->writeHTMLCell(0, 0, '', '', $testOtazky, 0, 1, 0, true, '', true);
+$pdfGenerator = new Pdf();
+$pdf->writeHTML($pdfGenerator->generateQuestionsHtml($exportData["test"]["questions"]));
 
 // ---------------------------------------------------------
 
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
-$pdf->Output('example_001.pdf', 'I');
+$pdf->Output('export_student_test'. $id.'.pdf');
 
 //============================================================+
 // END OF FILE

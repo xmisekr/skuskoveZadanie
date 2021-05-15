@@ -15,7 +15,7 @@ class SharedRepository extends Repository{
         $statement = $this->connection->prepare($sql);
 
         if ($statement){
-            $values = array_values($data);
+            $values = array_map(fn ($value) => is_array($value) ? implode(',', $value) : $value, array_values($data));
             $types = str_repeat('s', count($values));
             $statement->bind_param($types, ...$values);
             $statement->execute();
@@ -33,9 +33,9 @@ class SharedRepository extends Repository{
         $i = 0;
         foreach($conditions as $key => $value){
             if ($i == 0){
-                $sql = $sql . " WHERE $key=?";
+                $sql .=  is_array($value) ? " WHERE $key IN (?)" : " WHERE $key=?";
             }else{
-                $sql = $sql . " AND $key=?";
+                $sql .= is_array($value) ? " AND $key IN (?)" : " AND $key=?";
             }
             $i++;
         }
