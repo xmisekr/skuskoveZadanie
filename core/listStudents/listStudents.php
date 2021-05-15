@@ -60,7 +60,7 @@ $student_test = $repository->selectAll('student_test', ['test_id' => $_GET['test
                                 <td class="cell"><?php echo $student['name']?></td>
                                 <td class="cell"><?php echo $student['surname']?></td>
                                 <td class="cell"><?php echo $studentTest['score']?></td>
-                                <td class="cell"><a href=""><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
+                                <td class="cell"><a href="<?php echo "../reviewAnswers/reviewAnswers.php?student_test_id=" . $studentTest['id'] ?>"><i class="fa fa-external-link" aria-hidden="true"></i></a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
