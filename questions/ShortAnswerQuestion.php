@@ -1,5 +1,5 @@
 <?php
-	include_once ("repository/SharedRepository.php");
+	include_once ROOT_PATH . '/repository/SharedRepository.php';
 
 
 	function addQuestionToDBSA($testId, $question, $questionId, $maxPoints, $answer, $answerId){
