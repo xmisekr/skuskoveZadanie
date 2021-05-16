@@ -42,31 +42,42 @@ class Pdf
     }
 
     private function getTextQuestion(array $questionData): string{
-        return "<p>{$questionData['question']["value"]} [{$questionData["answers"][0]["points"]} / {$questionData['question']["max_points"]}]</p>
+        return "<p>Short answer: {$questionData['question']["value"]} [ {$questionData["student_test_answers"][0]["points"]}
+                                                                        / {$questionData['question']["max_points"]}]</p>
                 <p>Students answer: {$questionData["student_test_answers"][0]["student_answer"]}</p>
                 <p>Correct answer: {$questionData["answers"][0]["value"]}</p>
 ";
     }
 
     private function getChoiceQuestion(array $questionData): string{
-        return "<p>{$questionData['question']["value"]} [ {$questionData["answers"][0]["points"]} / {$questionData['question']["max_points"]}]</p>
+        return "<p>Choice: {$questionData['question']["value"]} [ {$questionData["student_test_answers"][0]["points"]} / {$questionData['question']["max_points"]}]</p>
+                <p>Options:</p>
+                
+                    <input type='radio' id='option1' checked='checked'> 
+                    <label for='option1'>{$questionData["answers"][0]["value"]}</label>
+                    <input type='radio' id='option2'>
+                    <label for='option2'>{$questionData["answers"][1]["value"]}</label>
+                     <input type='radio' id='option3'>
+                    <label for='option3'>{$questionData["answers"][2]["value"]}</label>
+                     <input type='radio' id='option4'>
+                    <label for='option4'>{$questionData["answers"][3]["value"]}</label>
                 <p>Students answer: {$questionData["student_test_answers"][0]["student_answer"]}</p>
                 <p>Correct answer: {$questionData["answers"][0]["value"]}</p>
 ";
     }
 
     private function getPairQuestion(array $questionData): string{
-        return "<p>Pair {$questionData["question"]["value"]} [ TODO / {$questionData['question']["max_points"]}]</p>
-                <p>Students answer: TODO</p>
-                <p>Correct answer: TODO</p>
+        return "<p>Pair: {$questionData["question"]["value"]} [ {$questionData["student_test_answers"][0]["points"]} / {$questionData['question']["max_points"]}]</p>
+                <p>Students answer: {$questionData["student_test_answers"][0]["student_answer"]}</p>
+                <p>Correct answer: {$questionData["answers"][0]["value"]}</p>
             ";
     }
 
     private function getDrawingQuestion(array $questionData): string{
-        return "";
+        return "<p>Drawing:</p>";
     }
 
     private function getMathQuestion(array $questionData): string{
-        return "";
+        return "<p>Math: </p>";
     }
 }
