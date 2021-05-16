@@ -14,5 +14,7 @@ class Repository{
         $this->connection->close();
 
     }
+
+    public function getConnection(){}
 }
 

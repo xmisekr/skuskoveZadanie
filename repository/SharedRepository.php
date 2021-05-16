@@ -28,7 +28,6 @@ class SharedRepository extends Repository{
         $statement = $this->connection->prepare($sql);
 
         if ($statement){
-           // $values = array_map(fn ($value) => is_array($value) ? implode(',', $value) : $value, array_values($data));
             $values = array_values($this->array_flatten($data));
             $types = str_repeat('s', count($values));
             $statement->bind_param($types, ...$values);
@@ -155,5 +154,12 @@ class SharedRepository extends Repository{
 
         $statement = $this->executeConditionQuery($sql,$data);
         return $statement;
+    }
+
+    public function execute(string $sql, array $data){
+        $statement = $this->executeConditionQuery($sql, $data);
+        $records = $statement->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        return $records;
     }
 }

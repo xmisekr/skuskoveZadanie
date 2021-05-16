@@ -31,7 +31,7 @@ if (!isset($_SESSION['id']) && !isset($_SESSION['type'])){
 
                 <div class="header">
                     <a href="../dashboard/dashboard.php"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
-
+                    <a href="/export/allExportedData.php?id=<?=$_GET['test_id']?>">Export to csv</a>
                     <div class="dropdown">
                         <a class="dropdown-toggle float-right mb-4" id="dropdown" type="button" data-toggle="dropdown">
                             <i class="fa fa-envelope"></i> <span class="badge badge-danger" id="notification-counter">0/span>

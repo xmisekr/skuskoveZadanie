@@ -12,7 +12,8 @@ require_once APP_ROOT_PATH . '/helper/Pdf.php';
 $id = $_GET['id'] ?? null;
 
 if ($id === null) {
-    header("location: {$_SERVER['HTTP_REFERER']}");
+    $referer = $_SERVER['HTTP_REFERER'] ?? '/core/dashboard/dashboard.php';
+    header("location: {$referer}");
 }
 
 $export = new Export();

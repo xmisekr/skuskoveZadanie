@@ -16,7 +16,8 @@ class Export
      * @param int $id
      * @return array
      */
-    public function getStudentTest(int $id): ?array {
+    public function getStudentTest(int $id): ?array
+    {
         $studentTest = $this->repository->findById("student_test", $id);
 
         if ($studentTest === null) {
@@ -25,11 +26,11 @@ class Export
 
         //todo export nie je moynz ak nie jd okonceny test
 
-        $studentId = (int) $studentTest["student_id"];
+        $studentId = (int)$studentTest["student_id"];
 
         $student = $this->repository->findById("student", $studentId);
 
-        $testId = (int) $studentTest["test_id"];
+        $testId = (int)$studentTest["test_id"];
 
         $test = $this->getTestData($testId, $id);
 
@@ -40,10 +41,11 @@ class Export
         ];
     }
 
-    private function getTestData(int $testId, int $studentTestId): ?array {
+    private function getTestData(int $testId, int $studentTestId): ?array
+    {
         $test = $this->repository->findById("test", $testId);
 
-        if ($test === null){
+        if ($test === null) {
             return null;
         }
 
@@ -64,7 +66,7 @@ class Export
             'test_id' => $testId,
         ]);
 
-        $questions_ids = array_map(fn ($q) => $q['id'], $questions);
+        $questions_ids = array_map(fn($q) => $q['id'], $questions);
 
         // Vsetky odpovede na dane otazky
         $answers = $this->repository->selectAll('answer', [
@@ -82,7 +84,8 @@ class Export
         );
     }
 
-    private function groupAnswersWithQuestions(array $questions, array $answers, array $student_test_answers): array {
+    private function groupAnswersWithQuestions(array $questions, array $answers, array $student_test_answers): array
+    {
         $grouped_questions = [];
 
         foreach ($questions as $question) {
@@ -102,6 +105,27 @@ class Export
         }
 
         return array_values($grouped_questions);
+    }
+
+
+    //csv
+
+    public function getMaxPointsByTestId(int $testId): int
+    {
+        $sql = "SELECT sum(max_points) as sum FROM question where test_id = ?;";
+
+        $points = $this->repository->execute($sql, ['testId' => $testId]);
+        return (int)$points[0]["sum"];
+
+    }
+
+    public function findStudentsByTestId(int $testId): array
+    {
+        $sql = "SELECT  s.pid, s.name, s.surname, student_test.score FROM student_test
+                inner join student s on student_test.student_id = s.id
+                where test_id = ?;";
+
+        return $this->repository->execute($sql, ['testId' => $testId]);
     }
 }
 
