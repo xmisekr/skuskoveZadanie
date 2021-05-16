@@ -1,0 +1,22 @@
+.center-container{
+    width: 60%;
+    max-width: 500px;
+    margin: auto;
+    border: solid 1px gray;
+    padding: 1em;
+    border-top: solid 3px lightblue;
+    border-radius: 4px;
+    background-color: white;
+}
+
+section{
+    padding-top: 10em;
+}
+
+p{
+    margin-left: 1em;
+}
+
+.score{
+    font-weight: bold;
+}
