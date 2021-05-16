@@ -1,0 +1,61 @@
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+* {
+  margin:0px;
+  padding:0px;
+  box-sizing:border-box;
+}
+
+.apppaint {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:650px;
+  height:650px;
+  font-family:"Raleway", sans-serif;
+}
+.apppaint .controls {
+  height:50px;
+  display:flex;
+  align-items:center;
+  background:#ddd;
+  padding:0px 10px;
+}
+.apppaint .controls .title {
+  font-weight:600;
+  color:#222;
+  width:80px;
+}
+.apppaint .controls .type,
+.apppaint .controls .size,
+.apppaint .controls .color {
+  margin: 0px 10px;
+}
+.apppaint .controls .type input {
+  display:none;
+}
+.apppaint .controls .type label {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  text-align:center;
+  line-height:30px;
+  margin:0px 2px;
+  cursor:pointer;
+}
+.apppaint .controls .type input:checked + label {
+  background:#111;
+  color:#eee;
+  border-radius:50%;
+}
+.apppaint .controls .size input {
+  height:10px;
+}
+.apppaint .controls .actions {
+  flex:1;
+  text-align:right;
+}
+.apppaint .controls .actions button {
+  padding:5px 10px;
+  cursor:pointer;
+}
