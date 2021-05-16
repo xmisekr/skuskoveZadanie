@@ -14,6 +14,11 @@
     text-align:center;
     transition: all 0.2s;
   }
+
+  .heading{
+    display: flex;
+    justify-content: space-between;
+  }
   
   .new-test{
     display: flex;

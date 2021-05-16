@@ -1,13 +1,15 @@
 $(document).ready(function(){
     function startCountdown(){
         var myTimer = $('.countdown').startTimer({
-    
+            onComplete: function(element){
+                timerExpired();
+            },
             onPause: $('.timerpause'),
         
             onReset: $('.timerreset'),
         
-            onStart: $('.timerstart')
-        
+            onStart: $('.timerstart'),
+            
         });
         
         myTimer.trigger('start');

@@ -25,7 +25,6 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['type']) && !isset($_SESSI
 }
 
 if (isset($_POST)){
-	var_dump($_POST);
 	foreach ($_POST as $questionId => $answer ){
 		echo "<br>id ".$questionId." ans ".$answer;
 		if (strcmp($questionId, "studentId")==0){
@@ -39,9 +38,21 @@ if (isset($_POST)){
             }
 		}
 	}
-	//header("location: submit.php");//todo
+
+    //calculate test score
+    $student_answers = $repository->selectAll('student_test_answer', ['student_test_id' => $studentTest['id']]);
+    $score = 0;
+
+    var_dump($student_answers);
+    foreach($student_answers as $answer){
+        $score = $score + $answer['points'];
+    }
+
+    $data['score'] = $score;
+    $data['in_test'] = 0;
+    $data['completed'] = 1;
+    $repository->update('student_test', $studentTest['id'], $data);
 }
-echo $_SESSION['username'].$_SESSION['type'].$_SESSION['studentTestId'];
 
 	
 ?>

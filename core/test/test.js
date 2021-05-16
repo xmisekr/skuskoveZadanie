@@ -54,6 +54,47 @@ function submitPairQuestions(){
    
 }
 
+function timerExpired(){
+    submitPairQuestions();
+
+    var that = $('form.ajax'),
+        url = that.attr('action'),
+        type = that.attr('method'),
+        data = {};
+
+    that.find('[name]').each(function(index, value) {
+        var that = $(this),
+            name = that.attr('name'),
+            value = that.val();
+
+            if (that.attr('type') != "radio"){
+                data[name] = value;
+
+            }else{
+                if (that.is(':checked')){
+                    data[name] = value;
+                }
+            }
+
+        
+    });
+
+    $.ajax({
+        url: url,
+        method: type,
+        data: data,
+        success: function(){
+        }
+    });
+
+    setTimeout(()=>{
+        window.location.href = '../testCompleted/testCompleted.php';
+
+    },1000);
+
+    return false;
+}
+
 //sends all
 $('form.ajax').on('submit', function() {
     submitPairQuestions();
@@ -70,7 +111,6 @@ $('form.ajax').on('submit', function() {
 
             if (that.attr('type') != "radio"){
                 data[name] = value;
-                console.log("hit");
 
             }else{
                 if (that.is(':checked')){
@@ -85,8 +125,14 @@ $('form.ajax').on('submit', function() {
         url: url,
         method: type,
         data: data,
-        success: function(){}
+        success: function(){
+        }
     });
+
+    setTimeout(()=>{
+        window.location.href = '../testCompleted/testCompleted.php';
+
+    },1000);
 
     return false;
 });
