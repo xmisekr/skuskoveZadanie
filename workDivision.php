@@ -156,6 +156,7 @@
 		</tr>
 	</table>
 	<br>
+	<p class="text-center"> <a href="login.php"> get back</a> </p>
 	<br>
 
 </div>
