@@ -10,7 +10,6 @@ class ConnectionFactory{
 
     public function createConnection(){
         $config = new Configuration();
-        
         $connection = new MySQLi($config->hostname, $config->username, $config->password, $config->databaseName);
 
         if ($connection->connect_error){

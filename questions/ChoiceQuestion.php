@@ -1,5 +1,5 @@
 <?php
-	include_once ("repository/SharedRepository.php");
+	include_once ROOT_PATH . '/repository/SharedRepository.php';
 
 
 	function addQuestionToDBCh($testId, $question, $questionId, $maxPoints, $choices, $choicesIds ){//answers send as answer=> 1/0 where 12 is tru 0 is false

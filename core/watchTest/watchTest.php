@@ -16,6 +16,8 @@ if (!isset($_SESSION['id']) && !isset($_SESSION['type'])){
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../../style/main-styles.css">
+
         <title>Watch test</title>
     </head>
         
@@ -26,14 +28,20 @@ if (!isset($_SESSION['id']) && !isset($_SESSION['type'])){
         <section class="watch-test">
             <input id="test_id" type="hidden" value="<?php echo $_GET['test_id'] ?>">
             <div class="container">
-                <div class="dropdown">
-                    <a class="dropdown-toggle float-right mb-4" id="dropdown" type="button" data-toggle="dropdown">
-                        <i class="fa fa-envelope"></i> <span class="badge badge-danger" id="notification-counter">0/span>
-                    </a>
 
-                    <ul class="dropdown-menu" id="dropdown-menu">
-                    </ul>
+                <div class="header">
+                    <a href="../dashboard/dashboard.php"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+
+                    <div class="dropdown">
+                        <a class="dropdown-toggle float-right mb-4" id="dropdown" type="button" data-toggle="dropdown">
+                            <i class="fa fa-envelope"></i> <span class="badge badge-danger" id="notification-counter">0/span>
+                        </a>
+
+                        <ul class="dropdown-menu" id="dropdown-menu">
+                        </ul>
+                    </div>
                 </div>
+                
 
                 <table class="users table" cellspacing="0">
                     <thead class="users-header">
@@ -42,6 +50,7 @@ if (!isset($_SESSION['id']) && !isset($_SESSION['type'])){
                             <th class="users-surname cell">Surname</th>
                             <th class="users-in-test cell">In test</th>
                             <th class="users-completed cell">Completed</th>
+                            <th class="export cell">Export</th>
                         </tr>
                     </thead>
 

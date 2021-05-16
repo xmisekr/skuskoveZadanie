@@ -18,7 +18,7 @@ $student_test = $repository->selectAll('student_test', ['test_id' => $_GET['test
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="styles.css?version=51" type="text/css"/>
+        <link rel="stylesheet" href="styles.css" type="text/css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -32,14 +32,18 @@ $student_test = $repository->selectAll('student_test', ['test_id' => $_GET['test
         <section class="list-students">
 
             <div class="container">
-                <div class="dropdown">
-                    <a class="dropdown-toggle float-right mb-4" id="dropdown" type="button" data-toggle="dropdown">
-                        <i class="fa fa-envelope"></i> <span class="badge badge-danger" id="notification-counter">0/span>
-                    </a>
+                <div class="heading">
+                    <a href="../dashboard/dashboard.php"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle float-right mb-4" id="dropdown" type="button" data-toggle="dropdown">
+                            <i class="fa fa-envelope"></i> <span class="badge badge-danger" id="notification-counter">0/span>
+                        </a>
 
-                    <ul class="dropdown-menu" id="dropdown-menu">
-                    </ul>
+                        <ul class="dropdown-menu" id="dropdown-menu">
+                        </ul>
+                    </div>
                 </div>
+                
 
                 <table class="table-tests table" cellspacing="0">
                     <thead class="tests-header ">

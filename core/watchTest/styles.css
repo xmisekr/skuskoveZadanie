@@ -15,6 +15,11 @@
     text-align:center;
     transition: all 0.2s;
 }
+
+.header{
+  display: flex;
+  justify-content: space-between;
+}
     
 section{
   padding-top: 10em;

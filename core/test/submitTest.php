@@ -6,6 +6,7 @@ require_once ROOT_PATH . '/repository/SharedRepository.php';
 if(isset($_POST['arr'])){
     $repository = new SharedRepository();
     $data = json_decode($_POST['arr']);
+    $student_test_id = 0;
   
     for($i = 0; $i < count($data); $i++){
         $arr = $data[$i];
@@ -32,6 +33,7 @@ if(isset($_POST['arr'])){
         $answer = $repository->insert('student_test_answer', $insert);
 
     }
+
 }
 
 ?>
