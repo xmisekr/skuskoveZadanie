@@ -11,11 +11,25 @@ class SharedRepository extends Repository{
         parent::__destruct();
     }
 
+    private function array_flatten($array) {
+        $return = array();
+        foreach ($array as $key => $value) {
+            if (is_array($value)){
+                $return = array_merge($return, $this->array_flatten($value));
+            } else {
+                $return[$key] = $value;
+            }
+        }
+
+        return $return;
+    }
+
     public function executeConditionQuery($sql, $data){
         $statement = $this->connection->prepare($sql);
 
         if ($statement){
-            $values = array_map(fn ($value) => is_array($value) ? implode(',', $value) : $value, array_values($data));
+           // $values = array_map(fn ($value) => is_array($value) ? implode(',', $value) : $value, array_values($data));
+            $values = array_values($this->array_flatten($data));
             $types = str_repeat('s', count($values));
             $statement->bind_param($types, ...$values);
             $statement->execute();
@@ -33,9 +47,13 @@ class SharedRepository extends Repository{
         $i = 0;
         foreach($conditions as $key => $value){
             if ($i == 0){
-                $sql .=  is_array($value) ? " WHERE $key IN (?)" : " WHERE $key=?";
+                $sql .=  is_array($value)
+                    ? " WHERE $key IN (". implode(',', array_fill(0, count($value), '?')) .")"
+                    : " WHERE $key=?";
             }else{
-                $sql .= is_array($value) ? " AND $key IN (?)" : " AND $key=?";
+                $sql .= is_array($value)
+                    ? " AND $key IN (" . implode(',', array_fill(0, count($value), '?')) .")"
+                    : " AND $key=?";
             }
             $i++;
         }

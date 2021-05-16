@@ -49,9 +49,9 @@ class Pdf
     }
 
     private function getChoiceQuestion(array $questionData): string{
-        return "<p>{$questionData['question']["value"]} [ TODO / {$questionData['question']["max_points"]}]</p>
-                <p>Students answer: TODO</p>
-                <p>Correct answer: TODO</p>
+        return "<p>{$questionData['question']["value"]} [ {$questionData["answers"][0]["points"]} / {$questionData['question']["max_points"]}]</p>
+                <p>Students answer: {$questionData["student_test_answers"][0]["student_answer"]}</p>
+                <p>Correct answer: {$questionData["answers"][0]["value"]}</p>
 ";
     }
 

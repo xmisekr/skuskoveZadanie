@@ -72,7 +72,6 @@ class Export
         ]);
 
         $student_test_answers = $this->repository->selectAll('student_test_answer', [
-            'student_test_id' => $studentTestId,
             'question_id' => $questions_ids,
         ]);
 
