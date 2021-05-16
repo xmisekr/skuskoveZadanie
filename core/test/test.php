@@ -26,8 +26,9 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['type']) && !isset($_SESSI
 	header("location: ../../login.php");
 }
 
-if (isset($_POST)){
-	foreach ($_POST as $questionId => $answer ){
+if (isset($_POST['arr'])){
+    
+	foreach ($_POST['arr'] as $questionId => $answer ){
 		echo "<br>id ".$questionId." ans ".$answer;
 		if (strcmp($questionId, "studentId")==0){
 			//just id
@@ -49,7 +50,6 @@ if (isset($_POST)){
     $student_answers = $repository->selectAll('student_test_answer', ['student_test_id' => $studentTest['id']]);
     $score = 0;
 
-    var_dump($student_answers);
     foreach($student_answers as $answer){
         $score = $score + $answer['points'];
     }
@@ -124,7 +124,7 @@ if (isset($_POST)){
                 <?php endif; ?>
               
               <!-- Choice and Short Questions -->
-                <form action="test.php" method="post" class="ajax">
+                <form action="test.php" method="post" class="ajax" enctype="multipart/form-data">
                     <input type="hidden" name="studentId" id="studentId" value="<?php echo $studentTest["student_id"] ?>">
                     <div class="col " id="formDiv">
 
@@ -139,11 +139,12 @@ if (isset($_POST)){
 
                         }elseif (strcmp($question["type"], "math")==0){
 						addQuestionStudentMa($question["id"]);
-						}elseif (strcmp($question["type"], "drawing")==0{
+						}elseif (strcmp($question["type"], "drawing")==0){
 						addQuestionStudentDr($question["id"]);
-                    echo "</div>";
+                        }
+                        echo "</div>";
+                    
                     }
-
                     ?>
 					
 					<!-- Math Equation Editor -->
@@ -162,38 +163,23 @@ if (isset($_POST)){
 					Use drawing tool to draw simple solutions to drawing questions. Use save button do download your drawing, rename it following the naming convention of equation file upload, and then upload your answer.
 					As an answer to the question, type in the file name. You can also draw on paper, scan, and upload the scan file. Accepted formats are: .jpg, .jpeg, .png, .gif
 					</p>
-					<a href='/core/paintEditor/paintEditor.php' target="_blank">Open drawing editor</a>
+					<a href='../paintEditor/paintEditor.php' target="_blank">Open drawing editor</a>
 					
 					
-					<!-- Multiple file uploader-->
-					<?php 
-					if(isset($_POST['submit'])){
-						// Count total files
-						$countfiles = count($_FILES['file']['name']);
-						
-						// Looping all files
-						for($i=0;$i<$countfiles;$i++){for($i=0;$i<$countfiles;$i++){
-							$filename = $_FILES['file']['name'][$i];
-							
-							// Upload file
-							move_uploaded_file($_FILES['file']['tmp_name'][$i],'/core/upload/'.$filename);  //alter upload path here
-						}
-					}
-					?>
-					<form method='post' action='' enctype='multipart/form-data'>
-						<input type="file" name="file[]" id="file" multiple>
-
-						<input type='submit' name='submit' value='Upload'>
-					</form>
+                    <!-- tento upload cez -->
+					<!-- Multiple file -->
 					
-					
-					
-					
-
-
+				
                     <button type="submit" id="submit" class="btn btn-lg btn-info btn-block"  >Submit test</button>
                 
 	            </form>
+
+                <form method='post' action='saveFiles.php' enctype='multipart/form-data'>
+ 
+                    <input type="file" name="file[]" id="file" multiple>
+                    <input type='submit' name='fileUpload' value='Upload'>
+
+                </form>
 
             </div>
 
@@ -201,7 +187,7 @@ if (isset($_POST)){
         </section>
 
 
-		<script type="text/javascript" src="http://latex.codecogs.com/editor3.js"></script>
+		<script type="text/javascript" src="https://latex.codecogs.com/editor3.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>	
@@ -214,6 +200,7 @@ if (isset($_POST)){
         <script>
             var pairQuestions = <?php echo json_encode($pairQuestions); ?>;
             var pairAnswers = <?php echo json_encode($pairAnswers); ?>;
+
         </script>
     </body>
 

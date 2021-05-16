@@ -124,8 +124,9 @@ $('form.ajax').on('submit', function() {
     $.ajax({
         url: url,
         method: type,
-        data: data,
-        success: function(){
+        data: {arr: data},
+        success: function(msg){
+            console.log(msg);
         }
     });
 
