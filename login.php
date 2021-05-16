@@ -135,6 +135,7 @@ session_start();
 			</div>
 			<div class="container signin">
     		<p>Are you a teacher? Does not have an account? <a href="register.php">Register</a>.</p>
+				<p>Our work division: <a href="workDivision.php">Click here</a>. </p>
   		</div>
 		</form>
 
