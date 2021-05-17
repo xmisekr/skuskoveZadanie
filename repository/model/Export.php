@@ -24,7 +24,6 @@ class Export
             return null;
         }
 
-        //todo export nie je moynz ak nie jd okonceny test
 
         $studentId = (int)$studentTest["student_id"];
 
@@ -75,6 +74,7 @@ class Export
 
         $student_test_answers = $this->repository->selectAll('student_test_answer', [
             'question_id' => $questions_ids,
+            'student_test_id' => $studentTestId
         ]);
 
         return $this->groupAnswersWithQuestions(

@@ -36,7 +36,7 @@ $pdf->SetHeaderData(
 $pdf->setFooterData([0, 64, 0], [0, 64, 128]);
 
 // set header and footer fonts
-$pdf->setHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_HEADER_FONT_SIZE]);
+$pdf->setHeaderFont(['dejavusans', '', PDF_HEADER_FONT_SIZE]);
 $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
